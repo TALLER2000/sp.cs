@@ -1,0 +1,152 @@
+using System;
+
+namespace саод1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var lst = new Llist();
+            lst.AddLast(1);
+            lst.AddLast(2);
+            lst.AddLast(3);
+            lst.AddLast(4);
+            //lst[0] = 5;
+            //lst.AddFirst(0);
+            //lst.Insert(2, 6);
+            lst.Remove(6);
+            //Console.WriteLine(lst.head.value);
+            //Console.WriteLine(lst.head.next.value);
+            //Console.WriteLine(lst.head.next.next.value);
+            for(int i = 0; i != lst.Count; i++)
+            {
+                Console.WriteLine(lst[i]);
+            }
+            Console.WriteLine("H");
+
+        }
+
+
+    }
+   
+    class Node
+    {
+        public int value;
+        public Node next;
+        public Node(int x)
+        {
+            value = x ;
+        }
+
+    }
+    class Llist
+    {
+        public Node head;
+        public int Count;
+        public Llist()
+        {
+
+        }
+        public void AddLast(int x)
+        {
+            var toAdd = new Node(x);
+            if (head == null)
+            {
+                head = toAdd;
+
+            }
+            else
+            {
+                Node current = head;
+                while (current.next != null)
+                {
+                    current = current.next;
+
+                }
+                current.next = toAdd;
+            }
+            Count++;
+        }
+        public int this[int index]
+        {
+            get
+            {
+                Node current = head;
+                for (int i = 0; i != index && current != null; i++)
+                {
+                    current = current.next;
+                }
+                return current.value;
+            }
+            set
+            {
+                Node current = head;
+                for (int i = 0; i != index && current != null; i++)
+                    current = current.next;
+                current.value = value;
+            }
+        }
+        public void AddFirst(int x)
+        {
+            var toAdd = new Node(x);
+            toAdd.next = head;
+            head = toAdd;
+            Count++;
+        }
+        public void Clear()
+        {
+            head = null;
+            Count = 0;
+        }
+        public void Insert(int index, int x)
+        {
+            
+            var toAdd = new Node(x);
+            if(head == null)
+            {
+                head = toAdd;
+                Count++;
+            }
+            else
+            {
+                if(index == 0)
+                {
+                    AddFirst(x);
+                }
+                else
+                {
+                    Node current = head;
+                    Node prev = head;
+                    for (int i = 0; i <index; i++)
+                    {
+                        current = current.next;
+                        prev = current;
+                    }
+                    prev.next = toAdd;
+                    toAdd.next = current;
+                    Count++;
+                }
+            }
+        }
+        public void Remove(int index)
+        {
+            if(head!= null)
+            {
+                
+                if(index == 0)
+                {
+                    head = head.next;
+                    Count--;
+                }
+                else if(index<Count-1)
+                {
+                    Node current = head;
+                    for (int i = 0; i < index - 1 && current != null; i++)
+                        current = current.next;
+                    current.next = current.next.next;
+                    Count--;
+                }
+            }
+        }
+    }
+}
