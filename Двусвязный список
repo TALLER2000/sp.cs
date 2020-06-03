@@ -1,0 +1,161 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Text;
+
+namespace двусвязныйсписок
+{
+    public class Dspisok<T> : IEnumerable<T>
+    {
+        DNode<T> first; 
+        DNode<T> last;
+        int count;
+
+        public void Add(T data)
+        {
+            DNode<T> node = new DNode<T>(data);
+
+            if ( first == null)
+                first = node;
+            else
+            {
+                last.Next = node;
+                node.Prev = last;
+            }
+            last = node;
+            count++;
+        }
+        public void AddFirst(T data)
+        {
+            DNode<T> node = new DNode<T>(data);
+            DNode<T> temp = first;
+            node.Next = temp;
+            first = node;
+            if (count == 0)
+                last = first;
+            else
+                temp.Prev = node;
+            count++;
+        }
+        public bool Remove(T data)
+        {
+            DNode<T> current = first;
+            while (current != null)
+            {
+                if (current.Data.Equals(data))
+                {
+                    break;
+                }
+                current = current.Next;
+            }
+            if (current != null)
+            {
+                
+                if (current.Next != null)
+                {
+                    current.Next.Prev = current.Prev;
+                }
+                else
+                {
+
+                    last = current.Prev;
+                }
+                if (current.Prev != null)
+                {
+                    current.Prev.Next = current.Next;
+                }
+                else
+                {
+
+                    first = current.Next;
+                }
+                count--;
+                return true;
+            }
+            return false;
+        }
+
+        public int Count { get { return count; } }
+        public bool IsEmpty { get { return count == 0; } }
+
+        public void Clear()
+        {
+            first = null;
+            last = null;
+            count = 0;
+        }
+
+        public bool Contains(T data)
+        {
+            DNode<T> current = first;
+            while (current != null)
+            {
+                if (current.Data.Equals(data))
+                    return true;
+                current = current.Next;
+            }
+            return false;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return ((IEnumerable<T>)this).GetEnumerator();
+        }
+
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            DNode<T> current = first;
+            while (current != null)
+            {
+                yield return current.Data;
+                current = current.Next;
+            }
+        }
+
+        
+    }
+}
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace двусвязныйсписок
+{
+    public class DNode<T>
+    {
+        public DNode(T data)
+        {
+            Data = data;
+        }
+        public T Data { get; set; }
+        public DNode<T> Prev { get; set; }
+        public DNode<T> Next { get; set; }
+    }
+}
+using System;
+using System.Text;
+
+namespace двусвязныйсписок
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Dspisok<string> linkedList = new Dspisok<string>();
+            linkedList.Add("Natasha");
+            linkedList.Add("Dasha");
+            linkedList.Add("Liza");
+            linkedList.AddFirst("Alena");
+            foreach (var num in linkedList)
+            {
+                Console.WriteLine(num);
+            }
+            linkedList.Remove("Natasha");
+            foreach (var num in linkedList)
+            {
+                Console.Write(" " + num);
+            }
+
+        }
+    }
+}
